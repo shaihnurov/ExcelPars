@@ -18,6 +18,11 @@
             <DataTemplate DataType="{x:Type viewModel:ExcelViewModel}">
                 <view:ExcelView/>
             </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type viewModel:TechnicalTask2ViewModel}">
+                <view:TechnicalTask2View/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

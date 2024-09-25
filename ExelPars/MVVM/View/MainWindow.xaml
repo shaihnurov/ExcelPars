@@ -14,12 +14,24 @@
 
     <Border>
         <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Border Background="Transparent" Grid.Column="1">
+            <Border Background="Transparent" Grid.Column="2">
                 <ContentControl Content="{Binding CurrentView}" HorizontalAlignment="Center"/>
+            </Border>
+
+            <Border HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10 0 10 0" Grid.Column="1">
+                <StackPanel Orientation="Vertical">
+                    <Button Command="{Binding ExcelViewCommand}"
+                        Width="120" Height="35" Content="Загрузка Excel" Style="{StaticResource ButtonStyle}"/>
+                    <Button Command="{Binding Tt2ViewCommand}"
+                        Width="120" Height="35" Content="ТЗ №2" Style="{StaticResource ButtonStyle}"/>
+                    <Button Command="{Binding}"
+                        Width="120" Height="35" Content="ТЗ №3" Style="{StaticResource ButtonStyle}"/>
+                </StackPanel>
             </Border>
         </Grid>
     </Border>

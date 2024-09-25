@@ -82,9 +82,9 @@ namespace ExcelPars.MVVM.ViewModel
                 ExcelData = dataTable;
 
                 DateTime now = DateTime.Now;
-                string formattedDate = now.ToString("ddMMyyHHmmss");
+                string formattedDate = now.ToString("dd MM yy HH mm ss");
 
-                _tableName = string.Concat(System.IO.Path.GetFileNameWithoutExtension(filePath).Where(char.IsLetter)).Replace(" ", "_") + formattedDate;
+                _tableName = string.Concat(Path.GetFileNameWithoutExtension(filePath).Where(char.IsLetter)).Replace(" ", "_") + formattedDate.Replace(" ", "_");
             }
         }
         private Task<DataTable> ReadExcel(string filePath)

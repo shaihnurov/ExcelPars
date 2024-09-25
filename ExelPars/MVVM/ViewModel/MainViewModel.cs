@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Windows.Forms;
 
 namespace ExcelPars.MVVM.ViewModel
 {
@@ -14,12 +16,26 @@ namespace ExcelPars.MVVM.ViewModel
             }
         }
 
+        public RelayCommand ExcelViewCommand { get; set; }
+        public RelayCommand Tt2ViewCommand { get; set; }
+
         private readonly ExcelViewModel _exelViewModel;
+        private readonly TechnicalTask2ViewModel _tt2ViewModel;
 
         public MainViewModel()
         {
             _exelViewModel = new ExcelViewModel();
+            _tt2ViewModel = new TechnicalTask2ViewModel();
             _currentView = _exelViewModel;
+
+            ExcelViewCommand = new RelayCommand(() =>
+            {
+                CurrentView = _exelViewModel;
+            });
+            Tt2ViewCommand = new RelayCommand(() =>
+            {
+                CurrentView = _tt2ViewModel;
+            });
         }
     }
 }

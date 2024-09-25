@@ -16,7 +16,7 @@
     <Grid>
         <StackPanel Orientation="Vertical">
 
-            <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+            <StackPanel Margin="0 50 0 0" Grid.Row="0" HorizontalAlignment="Center">
                 <TextBlock Text="Страница загрузки" FontSize="35" FontWeight="SemiBold"/>
             </StackPanel>
 

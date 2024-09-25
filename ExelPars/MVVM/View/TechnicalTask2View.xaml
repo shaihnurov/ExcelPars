@@ -1,0 +1,145 @@
+﻿<UserControl x:Class="ExcelPars.MVVM.View.TechnicalTask2View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExcelPars.MVVM.View"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModel="clr-namespace:ExcelPars.MVVM.ViewModel"
+             mc:Ignorable="d" d:Background="White" Style="{StaticResource Page_Style}"
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <UserControl.DataContext>
+        <viewModel:TechnicalTask2ViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <Grid>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Margin="0 50 0 0" Grid.Row="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Техническое задание 2" FontSize="35" FontWeight="SemiBold"/>
+
+                    <TextBlock Text="Выберите БД для работы" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Margin="0 20 0 0" Visibility="{Binding IsVisibleButtons}">
+                    <Button Style="{StaticResource ButtonStyle}" Width="510" Height="40"
+                        Content="Просмотреть список складов с разбивкой по месяцам" FontSize="20" Command="{Binding ButtonGetResult1Command}"/>
+                    <Button Style="{StaticResource ButtonStyle}" Width="680" Height="40"
+                        Content="Просмотреть список складов, которые числяться только в одном месяце" FontSize="20" Command="{Binding ButtonGetResult2Command}"/>
+                </StackPanel>
+
+
+                <mah:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="#E7BA14"
+                         Height="100" Width="100" Visibility="{Binding IsVisibleProgressRing}" Margin="0 20 0 0"/>
+
+                <StackPanel Visibility="{Binding IsVisibilyGetTables}" Margin="0 20 0 0">
+                    <ItemsControl ItemsSource="{Binding TaskModel}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0.2" BorderBrush="Gray" Background="Transparent" CornerRadius="20"
+                                    Margin="30 10 0 10" MinWidth="250" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal" Margin="15 15 15 15">
+                                            <TextBlock Text="Название БД: " FontSize="18" FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" Foreground="#FFB200"/>
+                                            <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                            <Button Style="{StaticResource ButtonStyle}" Width="100" Height="30"
+                                                Margin="10 0" Content="Выбрать" Command="{Binding DataContext.ButtonGetTableCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <StackPanel Margin="0 20 0 0" Visibility="{Binding IsVisibilyResult}" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Количество складов и документов: " FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding StoreCount}" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                        <TextBlock Text=" и " FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding DocumentCount}" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0 20 0 0" Visibility="{Binding IsVisibilyResult1}" HorizontalAlignment="Center">
+                        <ItemsControl ItemsSource="{Binding StoreModel}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="0.2" BorderBrush="Gray" Background="Transparent" CornerRadius="20"
+                                        Margin="30 10 0 10" MinWidth="250" HorizontalAlignment="Center">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Код склада: " FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="#E7BA14"/>
+                                                <TextBlock Text="{Binding Store}" FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Дата проведения документа: " FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="#E7BA14"/>
+                                                <TextBlock Text="{Binding Year}" FontSize="23" FontWeight="Light" TextWrapping="Wrap"/>
+                                                <TextBlock Text=" год " FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Month}" FontSize="23" FontWeight="Light" TextWrapping="Wrap"/>
+                                                <TextBlock Text=" месяц" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Количество документов: " FontSize="23" FontWeight="SemiBold" Foreground="#E7BA14"/>
+                                                <TextBlock Text="{Binding DocumentCount}" FontSize="23" FontWeight="Light" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <StackPanel Margin="0 20 0 0" Visibility="{Binding IsVisibilyResult2}" HorizontalAlignment="Center">
+                        <ItemsControl ItemsSource="{Binding StoreModel}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderThickness="0.2" BorderBrush="Gray" Background="Transparent" CornerRadius="20"
+                                        Margin="30 10 0 10" MinWidth="250" HorizontalAlignment="Center">
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Код склада: " FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="#E7BA14"/>
+                                                <TextBlock Text="{Binding Store}" FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Дата проведения документа: " FontSize="23" FontWeight="SemiBold" TextWrapping="Wrap" Foreground="#E7BA14"/>
+                                                <TextBlock Text="{Binding Year}" FontSize="23" FontWeight="Light" TextWrapping="Wrap"/>
+                                                <TextBlock Text=" год " FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Month}" FontSize="23" FontWeight="Light" TextWrapping="Wrap"/>
+                                                <TextBlock Text=" месяц" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Количество документов: " FontSize="23" FontWeight="SemiBold" Foreground="#E7BA14"/>
+                                                <TextBlock Text="{Binding DocumentCount}" FontSize="23" FontWeight="Light" TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

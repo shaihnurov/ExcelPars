@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using ExcelPars.MVVM.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExcelPars.Repository
 {
