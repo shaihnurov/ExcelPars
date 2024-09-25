@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="ExcelPars.MVVM.View.ExcelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:ExcelPars.MVVM.ViewModel"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:local="clr-namespace:ExcelPars.MVVM.View"
+             mc:Ignorable="d" d:Background="White" Style="{StaticResource Page_Style}"
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <UserControl.DataContext>
+        <viewModel:ExcelViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+        <StackPanel Orientation="Vertical">
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Center">
+                <TextBlock Text="Страница загрузки" FontSize="35" FontWeight="SemiBold"/>
+            </StackPanel>
+
+            <StackPanel Margin="0 0 0 0">
+                <TextBlock Text="Выберите файл для загрузки" FontSize="23" HorizontalAlignment="Center"
+                       FontWeight="Light"/>
+            </StackPanel>
+
+            <StackPanel Margin="0 20 0 0">
+                <Button Style="{StaticResource ButtonStyle}" Width="150" Height="40"
+                        Content="Выбрать файл" FontSize="20" Command="{Binding FileLoadCommand}"/>
+            </StackPanel>
+
+            <StackPanel Margin="0 50 0 0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <mah:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="#E7BA14"
+                         Height="100" Width="100" Visibility="{Binding IsVisibleProgressRing}"/>
+
+                <DataGrid ItemsSource="{Binding ExcelData}" AutoGenerateColumns="True" Visibility="{Binding IsVisibleDataGrid}"
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="500"/>
+            </StackPanel>
+
+            <StackPanel Margin="0 60 0 0" Visibility="{Binding SaveDbFile}">
+                <Button Style="{StaticResource ButtonStyle}" Width="230" Height="40"
+                        Content="Сохранить данные в БД" FontSize="20" Command="{Binding SaveDbCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

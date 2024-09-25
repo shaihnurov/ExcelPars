@@ -1,0 +1,23 @@
+﻿<Application x:Class="ExcelPars.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ExcelPars"
+             xmlns:viewModel="clr-namespace:ExcelPars.MVVM.ViewModel"
+             xmlns:view="clr-namespace:ExcelPars.MVVM.View"
+             StartupUri="MVVM\View\MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/Style.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <DataTemplate DataType="{x:Type viewModel:MainViewModel}">
+                <view:MainWindow/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:ExcelViewModel}">
+                <view:ExcelView/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
