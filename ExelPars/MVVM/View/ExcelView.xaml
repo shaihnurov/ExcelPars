@@ -43,7 +43,7 @@
 
                 <DataGrid ItemsSource="{Binding ExcelData}" AutoGenerateColumns="True" Visibility="{Binding IsVisibleDataGrid}"
                           ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="500" MaxWidth="1500"
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto" IsReadOnly="True"/>
             </StackPanel>
 
             <StackPanel Margin="0 60 0 0" Visibility="{Binding SaveDbFile}">

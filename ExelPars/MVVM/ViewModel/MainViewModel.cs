@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Globalization;
+using System.Threading;
 
 namespace ExcelPars.MVVM.ViewModel
 {
@@ -25,6 +27,9 @@ namespace ExcelPars.MVVM.ViewModel
 
         public MainViewModel()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-EN");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-EN");
+
             _exelViewModel = new ExcelViewModel();
             _tt2ViewModel = new TechnicalTask2ViewModel();
             _tt3ViewModel = new TechnicalTask3ViewModel();

@@ -208,8 +208,11 @@ namespace ExcelPars.MVVM.ViewModel
 
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    string insertSql = GenerateInsertQuery(tableName, dataTable, row);
-                    await db.Database.ExecuteSqlRawAsync(insertSql);
+                    if(!IsRowEmpty(row))
+                    {
+                        string insertSql = GenerateInsertQuery(tableName, dataTable, row);
+                        await db.Database.ExecuteSqlRawAsync(insertSql);
+                    }
                 }
 
                 IsVisibleProgressRing = Visibility.Collapsed;
@@ -238,13 +241,23 @@ namespace ExcelPars.MVVM.ViewModel
             foreach (DataColumn column in dataTable.Columns)
             {
                 columnNames.Add($"[{column.ColumnName}]");
-                values.Add($"'{row[column.ColumnName].ToString().Replace("'", "''")}'");
+                values.Add($"N'{row[column.ColumnName].ToString().Replace("'", "''")}'");
             }
 
             string columnsJoined = string.Join(", ", columnNames);
             string valuesJoined = string.Join(", ", values);
 
             return $"INSERT INTO [{tableName}] ({columnsJoined}) VALUES ({valuesJoined})";
+        }
+        private bool IsRowEmpty(DataRow row)
+        {
+            foreach(var item in row.ItemArray)
+            {
+                if(item != DBNull.Value && !string.IsNullOrWhiteSpace(item.ToString())){
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

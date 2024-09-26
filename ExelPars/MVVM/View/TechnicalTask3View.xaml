@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModel="clr-namespace:ExcelPars.MVVM.ViewModel"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
              xmlns:local="clr-namespace:ExcelPars.MVVM.View"
              mc:Ignorable="d" d:Background="White" Style="{StaticResource Page_Style}"
              d:DesignHeight="800" d:DesignWidth="1200">
@@ -19,10 +20,60 @@
                 <StackPanel Margin="0 50 0 0" Grid.Row="0" HorizontalAlignment="Center">
                     <TextBlock Text="Отчет" FontSize="35" HorizontalAlignment="Center" FontWeight="SemiBold"/>
 
-                    <TextBlock Text="Выберите БД для работы" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
                 </StackPanel>
-                
-                
+
+                <TextBlock Text="{Binding SelectedDbText}" FontSize="23" FontWeight="Light" 
+                           HorizontalAlignment="Center" Margin="0 50 0 0"/>
+
+                <StackPanel Visibility="{Binding IsVisibilyGetTables}" Margin="0 20 0 0">
+                    <ItemsControl ItemsSource="{Binding TaskModel}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="0.2" BorderBrush="Gray" Background="Transparent" CornerRadius="20"
+                                    Margin="30 10 0 10" MinWidth="250" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal" Margin="15 15 15 15">
+                                            <TextBlock Text="Название БД: " FontSize="18" FontWeight="SemiBold"
+                                                   TextWrapping="Wrap" Foreground="#FFB200"/>
+                                            <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                            <Button Style="{StaticResource ButtonStyle}" Width="100" Height="30"
+                                                Margin="10 0" Content="Выбрать" Command="{Binding DataContext.ButtonGetTableCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <DataGrid ItemsSource="{Binding RecipesModel}" HorizontalAlignment="Center" Margin="0 20 0 0" 
+                          AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsTotalRow}" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                    <Setter Property="Background" Value="LightGray"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="год" Binding="{Binding Year}"/>
+                        <DataGridTextColumn Header="направление" Binding="{Binding Direction}"/>
+                        <DataGridTextColumn Header="количество человек" Binding="{Binding CountHuman}"/>
+                        <DataGridTextColumn Header="количество упаковок" Binding="{Binding CountPackages}"/>
+                        <DataGridTextColumn Header="сумма отпуска" Binding="{Binding SumCost}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </StackPanel>
         </Grid>
     </ScrollViewer>
