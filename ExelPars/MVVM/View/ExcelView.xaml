@@ -30,12 +30,20 @@
                         Content="Выбрать файл" FontSize="20" Command="{Binding FileLoadCommand}"/>
             </StackPanel>
 
+            <StackPanel Margin="0 20 0 0">
+                <TextBlock Text="Выберите лист" FontSize="20" HorizontalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding SheetNames}" SelectedItem="{Binding SelectedSheet}" 
+                          Width="200" Height="30" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                          FontSize="16"/>
+            </StackPanel>
+
             <StackPanel Margin="0 50 0 0" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <mah:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="#E7BA14"
                          Height="100" Width="100" Visibility="{Binding IsVisibleProgressRing}"/>
 
                 <DataGrid ItemsSource="{Binding ExcelData}" AutoGenerateColumns="True" Visibility="{Binding IsVisibleDataGrid}"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="500"/>
+                          ScrollViewer.VerticalScrollBarVisibility="Auto" MaxHeight="500" MaxWidth="1500"
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
             </StackPanel>
 
             <StackPanel Margin="0 60 0 0" Visibility="{Binding SaveDbFile}">

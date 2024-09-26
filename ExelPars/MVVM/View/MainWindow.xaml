@@ -28,9 +28,9 @@
                     <Button Command="{Binding ExcelViewCommand}"
                         Width="120" Height="35" Content="Загрузка Excel" Style="{StaticResource ButtonStyle}"/>
                     <Button Command="{Binding Tt2ViewCommand}"
-                        Width="120" Height="35" Content="ТЗ №2" Style="{StaticResource ButtonStyle}"/>
-                    <Button Command="{Binding}"
-                        Width="120" Height="35" Content="ТЗ №3" Style="{StaticResource ButtonStyle}"/>
+                        Width="120" Height="35" Content="Фильтрация" Style="{StaticResource ButtonStyle}"/>
+                    <Button Command="{Binding Tt3ViewCommand}"
+                        Width="120" Height="35" Content="Отчет" Style="{StaticResource ButtonStyle}"/>
                 </StackPanel>
             </Border>
         </Grid>

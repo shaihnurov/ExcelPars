@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="ExcelPars.MVVM.View.TechnicalTask3View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModel="clr-namespace:ExcelPars.MVVM.ViewModel"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:local="clr-namespace:ExcelPars.MVVM.View"
+             mc:Ignorable="d" d:Background="White" Style="{StaticResource Page_Style}"
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <UserControl.DataContext>
+        <viewModel:TechnicalTask3ViewModel/>
+    </UserControl.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+        <Grid>
+            <StackPanel Orientation="Vertical">
+                <StackPanel Margin="0 50 0 0" Grid.Row="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Отчет" FontSize="35" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+
+                    <TextBlock Text="Выберите БД для работы" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+                
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -20,7 +20,11 @@ namespace ExcelPars.MVVM.ViewModel
         private DataTable _excelData;
         private Visibility _saveDbFile = Visibility.Collapsed;
         private Visibility _isVisibleProgressRing = Visibility.Collapsed;
-        private Visibility _isVisibleDataGrid= Visibility.Collapsed;
+        private Visibility _isVisibleDataGrid = Visibility.Collapsed;
+
+        private List<string> _sheetNames;
+        private string _selectedSheet;
+        private string _filePath;
 
         public RelayCommand FileLoadCommand { get; set; }
         public RelayCommand SaveDbCommand { get; set; }
@@ -28,31 +32,41 @@ namespace ExcelPars.MVVM.ViewModel
         public Visibility SaveDbFile
         {
             get => _saveDbFile;
-            set
-            {
-                SetProperty(ref _saveDbFile, value);
-            }
+            set => SetProperty(ref _saveDbFile, value);
         }
         public Visibility IsVisibleProgressRing
         {
             get => _isVisibleProgressRing;
-            set
-            {
-                SetProperty(ref _isVisibleProgressRing, value);
-            }
+            set => SetProperty(ref _isVisibleProgressRing, value);
         }
         public Visibility IsVisibleDataGrid
         {
             get => _isVisibleDataGrid;
-            set
-            {
-                SetProperty(ref _isVisibleDataGrid, value);
-            }
+            set => SetProperty(ref _isVisibleDataGrid, value);
         }
         public DataTable ExcelData
         {
             get => _excelData;
             set => SetProperty(ref _excelData, value);
+        }
+        public List<string> SheetNames
+        {
+            get => _sheetNames;
+            set => SetProperty(ref _sheetNames, value);
+        }
+        public string SelectedSheet
+        {
+            get => _selectedSheet;
+            set
+            {
+                if (SetProperty(ref _selectedSheet, value))
+                {
+                    if (!string.IsNullOrEmpty(_filePath) && !string.IsNullOrEmpty(_selectedSheet))
+                    {
+                        _ = LoadExcelData(_filePath, _selectedSheet);
+                    }
+                }
+            }
         }
 
         public ExcelViewModel()
@@ -70,12 +84,50 @@ namespace ExcelPars.MVVM.ViewModel
 
             if (openFileDialog.ShowDialog() == true)
             {
-                await LoadExcelData(openFileDialog.FileName);
+                _filePath = openFileDialog.FileName;
+                SheetNames = await GetSheetNames(_filePath);
+
+                if (SheetNames.Count > 0)
+                {
+                    SelectedSheet = SheetNames.First();
+                }
             }
         }
-        private async Task LoadExcelData(string filePath)
+        private Task<List<string>> GetSheetNames(string filePath)
         {
-            DataTable dataTable = await ReadExcel(filePath);
+            return Task.Run(() =>
+            {
+                List<string> sheetNames = [];
+                string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={filePath};Extended Properties='Excel 12.0 Xml;HDR=YES;'";
+
+                try
+                {
+                    using (OleDbConnection connection = new(connectionString))
+                    {
+                        connection.OpenAsync();
+                        DataTable schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+                        if (schemaTable != null)
+                        {
+                            foreach (DataRow row in schemaTable.Rows)
+                            {
+                                string sheetName = row["TABLE_NAME"].ToString();
+                                sheetNames.Add(sheetName);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при получении листов: {ex.Message}");
+                }
+
+                return sheetNames;
+            });
+        }
+        private async Task LoadExcelData(string filePath, string selectedSheet)
+        {
+            DataTable dataTable = await ReadExcel(filePath, selectedSheet);
 
             if (dataTable != null)
             {
@@ -84,10 +136,10 @@ namespace ExcelPars.MVVM.ViewModel
                 DateTime now = DateTime.Now;
                 string formattedDate = now.ToString("dd MM yy HH mm ss");
 
-                _tableName = string.Concat(Path.GetFileNameWithoutExtension(filePath).Where(char.IsLetter)).Replace(" ", "_") + formattedDate.Replace(" ", "_");
+                _tableName = string.Concat(Path.GetFileNameWithoutExtension(filePath).Where(char.IsLetter)).Replace(" ", "_") + string.Concat(SelectedSheet.Where(char.IsLetter)).Replace(" ", "_") + formattedDate.Replace(" ", "_");
             }
         }
-        private Task<DataTable> ReadExcel(string filePath)
+        private Task<DataTable> ReadExcel(string filePath, string sheetName)
         {
             return Task.Run(() =>
             {
@@ -102,22 +154,16 @@ namespace ExcelPars.MVVM.ViewModel
                 {
                     using (OleDbConnection connection = new(connectionString))
                     {
-                        connection.Open();
+                        connection.OpenAsync();
 
-                        DataTable schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-
-                        if (schemaTable != null && schemaTable.Rows.Count > 0)
+                        string query = $"SELECT * FROM [{sheetName}]";
+                        using (OleDbDataAdapter adapter = new(query, connection))
                         {
-                            string sheetName = schemaTable.Rows[0]["TABLE_NAME"].ToString();
-                            string query = $"SELECT * FROM [{sheetName}]";
-                            using (OleDbDataAdapter adapter = new(query, connection))
-                            {
-                                adapter.Fill(dataTable);
+                            adapter.Fill(dataTable);
 
-                                IsVisibleProgressRing = Visibility.Collapsed;
-                                IsVisibleDataGrid = Visibility.Visible;
-                                SaveDbFile = Visibility.Visible;
-                            }
+                            IsVisibleProgressRing = Visibility.Collapsed;
+                            IsVisibleDataGrid = Visibility.Visible;
+                            SaveDbFile = Visibility.Visible;
                         }
                     }
                 }
@@ -167,30 +213,31 @@ namespace ExcelPars.MVVM.ViewModel
         }
         private string GenerateCreateTableQuery(string tableName, DataTable dataTable)
         {
-            List<string> columns = [];
+            List<string> columns = new();
 
-            foreach(DataColumn column in dataTable.Columns)
+            foreach (DataColumn column in dataTable.Columns)
             {
                 columns.Add($"[{column.ColumnName}] NVARCHAR(MAX)");
             }
 
             string columnsJoined = string.Join(", ", columns);
-            return $"CREATE TABLE {tableName} ({columnsJoined})";
+            return $"CREATE TABLE [{tableName}] ({columnsJoined})";
         }
         private string GenerateInsertQuery(string tableName, DataTable dataTable, DataRow row)
         {
-            List<string> columnName = [];
+            List<string> columnNames = [];
             List<string> values = [];
 
             foreach (DataColumn column in dataTable.Columns)
             {
-                columnName.Add($"[{column.ColumnName}]");
-                values.Add($"N'{row[column].ToString().Replace("'", "''")}'");
+                columnNames.Add($"[{column.ColumnName}]");
+                values.Add($"'{row[column.ColumnName].ToString().Replace("'", "''")}'");
             }
 
-            string columnsJoined = string.Join(", ", columnName);
+            string columnsJoined = string.Join(", ", columnNames);
             string valuesJoined = string.Join(", ", values);
-            return $"INSERT INTO {tableName} ({columnsJoined}) VALUES ({valuesJoined})";
+
+            return $"INSERT INTO [{tableName}] ({columnsJoined}) VALUES ({valuesJoined})";
         }
     }
 }

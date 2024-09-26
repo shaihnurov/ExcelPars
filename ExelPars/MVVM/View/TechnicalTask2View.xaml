@@ -17,7 +17,7 @@
         <Grid>
             <StackPanel Orientation="Vertical">
                 <StackPanel Margin="0 50 0 0" Grid.Row="0" HorizontalAlignment="Center">
-                    <TextBlock Text="Техническое задание 2" FontSize="35" FontWeight="SemiBold"/>
+                    <TextBlock Text="Фильтрация" FontSize="35" HorizontalAlignment="Center" FontWeight="SemiBold"/>
 
                     <TextBlock Text="Выберите БД для работы" FontSize="23" FontWeight="Light" HorizontalAlignment="Center"/>
                 </StackPanel>

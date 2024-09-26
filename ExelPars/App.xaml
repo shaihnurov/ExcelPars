@@ -19,9 +19,12 @@
                 <view:ExcelView/>
             </DataTemplate>
 
-
             <DataTemplate DataType="{x:Type viewModel:TechnicalTask2ViewModel}">
                 <view:TechnicalTask2View/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:TechnicalTask3ViewModel}">
+                <view:TechnicalTask3View/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
