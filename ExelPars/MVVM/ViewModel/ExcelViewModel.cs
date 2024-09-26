@@ -197,6 +197,10 @@ namespace ExcelPars.MVVM.ViewModel
         }
         private async Task SaveToDatabase(DataTable dataTable, string tableName)
         {
+            IsVisibleProgressRing = Visibility.Visible;
+            SaveDbFile = Visibility.Collapsed;
+            IsVisibleDataGrid = Visibility.Collapsed;
+
             using (ApplicationContextDb db = new())
             {
                 string createTableSql = GenerateCreateTableQuery(tableName, dataTable);
@@ -208,6 +212,9 @@ namespace ExcelPars.MVVM.ViewModel
                     await db.Database.ExecuteSqlRawAsync(insertSql);
                 }
 
+                IsVisibleProgressRing = Visibility.Collapsed;
+                SaveDbFile = Visibility.Visible;
+                IsVisibleDataGrid = Visibility.Visible;
                 MessageBox.Show("Успешное сохранение в БД");
             }
         }
