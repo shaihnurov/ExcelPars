@@ -14,16 +14,23 @@
         <viewModel:TechnicalTask3ViewModel/>
     </UserControl.DataContext>
 
-    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <StackPanel Orientation="Vertical">
                 <StackPanel Margin="0 50 0 0" Grid.Row="0" HorizontalAlignment="Center">
                     <TextBlock Text="Отчет" FontSize="35" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-
                 </StackPanel>
 
-                <TextBlock Text="{Binding SelectedDbText}" FontSize="23" FontWeight="Light" 
+                <TextBlock Text="{Binding SelectedDbText}" Visibility="{Binding IsVisibilyTitleText}" FontSize="23" FontWeight="Light" 
                            HorizontalAlignment="Center" Margin="0 50 0 0"/>
+
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0 20 0 0">
+                    <TextBox Visibility="{Binding IsVisibilyCountRow}"
+                             Width="300" Height="30" HorizontalAlignment="Center" Text="{Binding FilterRowCount}"/>
+                </StackPanel>
+
+                <mah:ProgressRing HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="#E7BA14"
+                         Height="100" Width="100" Visibility="{Binding IsVisibleProgressRing}" Margin="0 50 0 0"/>
 
                 <StackPanel Visibility="{Binding IsVisibilyGetTables}" Margin="0 20 0 0">
                     <ItemsControl ItemsSource="{Binding TaskModel}" HorizontalAlignment="Center" HorizontalContentAlignment="Center">
@@ -53,8 +60,16 @@
                     </ItemsControl>
                 </StackPanel>
 
-                <DataGrid ItemsSource="{Binding RecipesModel}" HorizontalAlignment="Center" Margin="0 20 0 0" 
-                          AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid ItemsSource="{Binding RecipesModel}" HorizontalAlignment="Center" Margin="0 20 0 0" Visibility="{Binding IsVisibilyDataGrid}"
+                          AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="год" Binding="{Binding Year}"/>
+                        <DataGridTextColumn Header="направление" Binding="{Binding Direction}"/>
+                        <DataGridTextColumn Header="количество человек" Binding="{Binding CountHuman}"/>
+                        <DataGridTextColumn Header="количество упаковок" Binding="{Binding CountPackages}"/>
+                        <DataGridTextColumn Header="сумма отпуска" Binding="{Binding SumCost}"/>
+                    </DataGrid.Columns>
+
                     <DataGrid.Resources>
                         <Style TargetType="DataGridRow">
                             <Style.Triggers>
@@ -65,15 +80,10 @@
                             </Style.Triggers>
                         </Style>
                     </DataGrid.Resources>
-
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="год" Binding="{Binding Year}"/>
-                        <DataGridTextColumn Header="направление" Binding="{Binding Direction}"/>
-                        <DataGridTextColumn Header="количество человек" Binding="{Binding CountHuman}"/>
-                        <DataGridTextColumn Header="количество упаковок" Binding="{Binding CountPackages}"/>
-                        <DataGridTextColumn Header="сумма отпуска" Binding="{Binding SumCost}"/>
-                    </DataGrid.Columns>
                 </DataGrid>
+
+                <Button Style="{StaticResource ButtonStyle}" Width="150" Height="30" Visibility="{Binding IsVisibilyButtonStart}"
+                        Margin="0 40 0 0" Content="Начать фильтрацию" Command="{Binding ButtonStartSearch}"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

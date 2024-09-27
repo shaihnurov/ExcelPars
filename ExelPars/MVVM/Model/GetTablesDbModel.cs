@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ExcelPars.MVVM.Model
+﻿namespace ExcelPars.MVVM.Model
 {
     public class GetTablesDbModel
     {

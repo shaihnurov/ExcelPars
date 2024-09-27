@@ -4,7 +4,7 @@
     {
         public string Year { get; set; }
         public string Direction { get; set; }
-        public int CountHuman { get; set; }
+        public long CountHuman { get; set; }
         public decimal CountPackages { get; set; }
         public decimal SumCost { get; set; }
 

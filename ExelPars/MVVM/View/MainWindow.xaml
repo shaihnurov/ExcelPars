@@ -29,7 +29,7 @@
                         Width="120" Height="35" Content="Загрузка Excel" Style="{StaticResource ButtonStyle}"/>
                     <Button Command="{Binding Tt2ViewCommand}"
                         Width="120" Height="35" Content="Фильтрация" Style="{StaticResource ButtonStyle}"/>
-                    <Button Command="{Binding Tt3ViewCommand}" IsEnabled="False"
+                    <Button Command="{Binding Tt3ViewCommand}"
                         Width="120" Height="35" Content="Отчет" Style="{StaticResource ButtonStyle}"/>
                 </StackPanel>
             </Border>
